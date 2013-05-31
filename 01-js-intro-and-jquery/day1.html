@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Globant :: Welcome to the HTML5 bootcamp</title>
+	<style>
+		.background
+		{
+			opacity: 0.5;
+			position: absolute;
+			background-color: black;
+		}
+		.tweetContainer
+		{
+			position: relative;
+			left: 50%;
+			width: 300px; 			
+			background-color: white;
+		}
+	</style>
+	<script src="js/jquery-1.9.1.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			//alert('The page is loaded');
+			$('#alias').focus();
+			$('#btnWelcome').bind('click', function() {
+				getResponse();
+			});
+			getTweets();	
+		});	
+	
+		function getResponse() {
+			 $.ajax({
+				type: 'GET',
+				url: 'http://bootcamp.aws.af.cm/welcome/' + $('#alias').val(),
+				data: null, //Data sent to server
+				dataType: 'json',
+				success: function(msg) {
+					if (msg.error) {
+						$('#divResponse')
+							.html(msg.error)
+							.css('background-color', 'red');	
+					}
+					else {					
+						$('#divResponse')
+						.css('background-color', '')
+						.html(hightlightAlias(msg.response, $('#alias').val()));
+					}
+				}
+			});
+		}
+		
+		
+		function getTweets() {
+			$.ajax({
+				type: 'GET',
+				url: 'http://search.twitter.com/search.json?q=html5',
+				data: null, //Data sent to server
+				dataType: 'jsonp',
+				success: function(msg) {
+					$.each(msg.results, function() {
+						$('#tweetContainer').append('<div class=\"tweet\"><img src=\"' + this.profile_image_url + '\"/> @' + this.from_user + ' ' + this.created_at + '<br>' + this.text + '</div>');
+					});
+				}
+						
+			});		
+		}
+
+		function hightlightAlias(text, name) {
+			var index = text.indexOf(name);
+			if (index >= 0) {
+				text = text.substring(0,index) + "<span style=\"background-color:yellow\">" + text.substring(index,index+name.length) + "</span>" + text.substring(index + name.length);
+			}
+        	return text;
+		}
+	</script>
+  </head>
+<body>
+	<div class="background"></div>
+	<div>
+		<input type="text" id="alias">
+		<input type="button" value="Welcome" id="btnWelcome"/>
+		<div id="divResponse"></div>		
+	</div>
+	<div id="tweetContainer" class="tweetContainer"></div>
+</body>
+</html>
