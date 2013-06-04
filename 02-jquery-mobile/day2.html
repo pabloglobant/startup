@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Globant :: Welcome to the HTML5 bootcamp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+	<style>
+		.background
+		{
+			opacity: 0.5;
+			position: absolute;
+			background-color: black;
+		}
+		.tweetContainer
+		{
+			position: relative;
+			left: 50%;
+			width: 300px; 			
+			background-color: white;
+		}
+	</style>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			//alert('The page is loaded');
+			$(this).keyup(function(e){
+				console.log(e);
+				if (e.keyCode == 27)
+					$.mobile.loading("hide");					
+			});
+
+			$('#alias').focus();
+			$('#btnWelcome').bind('click', function() {
+				var $this = $( this ),
+			        theme = $this.jqmData( "theme" ) || $.mobile.loader.prototype.options.theme,
+			        msgText = $this.jqmData( "msgtext" ) || $.mobile.loader.prototype.options.text,
+			        textVisible = $this.jqmData( "textvisible" ) || $.mobile.loader.prototype.options.textVisible,
+			        textonly = !!$this.jqmData( "textonly" );
+			        html = $this.jqmData( "html" ) || "";
+				console.log(msgText);
+				$.mobile.loading("show", {
+					text: msgText,
+					textVisible: textVisible,
+					theme: theme,
+					textonly: textonly,
+					html: html
+				})
+				getResponse();
+			});
+			getTweets();	
+		});	
+	
+		function getResponse() {
+			 $.ajax({
+				type: 'GET',
+				url: 'http://bootcamp.aws.af.cm/welcome/' + $('#alias').val(),
+				data: null, //Data sent to server
+				dataType: 'json',
+				success: function(msg) {
+					if (msg.error) {
+						$('#divResponse')
+							.html(msg.error)
+							.css('background-color', 'red');	
+					}
+					else {					
+						$('#divResponse')
+						.css('background-color', '')
+						.html(hightlightAlias(msg.response, $('#alias').val()));
+					}
+				}
+			});
+		}
+		
+		
+		function getTweets() {
+			$.ajax({
+				type: 'GET',
+				url: 'http://search.twitter.com/search.json?q=html5',
+				data: null, //Data sent to server
+				dataType: 'jsonp',
+				success: function(msg) {
+					$.each(msg.results, function() {
+						$('#tweetContainer').append('<div class=\"tweet\"><img src=\"' + this.profile_image_url + '\"/> @' + this.from_user + ' ' + this.created_at + '<br>' + this.text + '</div>');
+					});
+				}
+						
+			});		
+		}
+
+		function hightlightAlias(text, name) {
+			var index = text.indexOf(name);
+			if (index >= 0) {
+				text = text.substring(0,index) + "<span style=\"background-color:yellow\">" + text.substring(index,index+name.length) + "</span>" + text.substring(index + name.length);
+			}
+        	return text;
+		}
+	</script>
+  </head>
+<body>
+	<div data-role="page" id="home">
+		<div data-role="header" data-id="persistent" data-position="fixed">
+			<div data-role="navbar">
+				<ul>
+					<li><a data-theme="b" href="#home" data-transition="slide">Home</a></li>
+					<li><a data-theme="b" href="#page1" data-transition="slide">Page One</a></li>
+					<li><a data-theme="b" href="#page2" data-transition="slide">Page Two</a></li>
+					<li><a data-theme="b" href="#page3" data-transition="slide">Page Three</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div>
+		<div data-role="content">
+			<div class="background"></div>
+			<div>
+				<input type="text" id="alias">
+				<button id="btnWelcome" class=".show-page-loading-msg" data-theme="b" data-textonly="false" data-textvisible="true" data-msgtext="Write your name, then press the button." data-icon="arrow-r" data-iconpos="right">Welcome</button>				
+				<div id="divResponse"></div>		
+			</div>
+			<div id="tweetContainer" class="tweetContainer"></div>
+		</div>
+	</div>
+	<div data-role="page" id="page1">
+
+		<div data-role="header" data-id="persistent" data-position="fixed">
+			<div data-role="navbar">
+				<ul >
+					<li><a data-theme="b" href="#home" data-transition="slide" data-direction="reverse">Home</a></li>
+					<li><a data-theme="b" href="#page1" data-transition="slide">Page One</a></li>
+					<li><a data-theme="b" href="#page2" data-transition="slide">Page Two</a></li>
+					<li><a data-theme="b" href="#page3" data-transition="slide">Page Three</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div><!-- /header -->
+
+		<div data-role="content">	
+			<p>Page 1</p>		
+		</div><!-- /content -->
+
+	</div><!-- /page1 -->
+
+	<div data-role="page" id="page2">
+		<div data-role="header" data-id="persistent" data-position="fixed">
+			<div data-role="navbar">
+				<ul >
+					<li><a data-theme="b" href="#home" data-transition="slide" data-direction="reverse">Home</a></li>
+					<li><a data-theme="b" href="#page1" data-transition="slide" data-direction="reverse">Page One</a></li>
+					<li><a data-theme="b" href="#page2" data-transition="slide">Page Two</a></li>
+					<li><a data-theme="b" href="#page3" data-transition="slide">Page Three</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div><!-- /header -->
+
+		<div data-role="content">	
+			<p>Page 2</p>		
+		</div><!-- /content -->
+	</div><!-- /page 2-->
+
+	<div data-role="page" id="page3">
+
+		<div data-role="header" data-id="persistent" data-position="fixed">
+			<div data-role="navbar">
+				<ul >
+					<li><a data-theme="b" href="#home" data-transition="slide" data-direction="reverse">Home</a></li>
+					<li><a data-theme="b" href="#page1" data-transition="slide" data-direction="reverse">Page One</a></li>
+					<li><a data-theme="b" href="#page2" data-transition="slide" data-direction="reverse">Page Two</a></li>
+					<li><a data-theme="b" href="#page3" data-transition="slide">Page Three</a></li>
+				</ul>
+			</div><!-- /navbar -->
+		</div><!-- /header -->
+
+		<div data-role="content">	
+			<p>Page 3</p>		
+		</div><!-- /content -->
+
+	</div><!-- /page 3 -->
+</body>
+</html>
