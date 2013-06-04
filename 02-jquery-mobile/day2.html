@@ -88,7 +88,8 @@
 				dataType: 'jsonp',
 				success: function(msg) {
 					$.each(msg.results, function() {
-						$(".tweetContainer").append('<li><a href=\"https:\/\/twitter.com\/' + this.from_user + '\"><img src=\"' + this.profile_image_url + '\"/>' + this.from_user + '<span class="time">' + this.created_at + '</span><p>' + this.text + '</p></a></li>').listview('refresh');
+						$(".tweetContainer").append('<li><a href=\"https:\/\/twitter.com\/' + this.from_user + '\"><img src=\"' + this.profile_image_url + '\"/>' + this.from_user + '<span class="time">' + this.created_at + '</span><p>' + this.text + '</p></a></li>');
+						$(".tweetContainer").listview('refresh');
 					});
 				}
 						
