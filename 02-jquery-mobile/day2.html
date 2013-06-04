@@ -10,16 +10,22 @@
 	<style>
 		.background
 		{
-			opacity: 0.5;
-			position: absolute;
-			background-color: black;
+			width: 100%;			
+			background-color: rgba(255,255,255,0.4);
 		}
 		.tweetContainer
 		{
 			position: relative;
-			left: 50%;
-			width: 300px; 			
-			background-color: white;
+			left: 10%;
+			width: 80%; 			
+		}
+		.time
+		{
+			position: relative;
+			float: right;
+			margin-top: 1px;
+			color: #bbb;
+			font-size: 12px;
 		}
 	</style>
 	<script type="text/javascript">
@@ -82,7 +88,7 @@
 				dataType: 'jsonp',
 				success: function(msg) {
 					$.each(msg.results, function() {
-						$('#tweetContainer').append('<div class=\"tweet\"><img src=\"' + this.profile_image_url + '\"/> @' + this.from_user + ' ' + this.created_at + '<br>' + this.text + '</div>');
+						$(".tweetContainer").append('<li><a href=\"https:\/\/twitter.com\/' + this.from_user + '\"><img src=\"' + this.profile_image_url + '\"/>' + this.from_user + '<span class="time">' + this.created_at + '</span><p>' + this.text + '</p></a></li>').listview('refresh');
 					});
 				}
 						
@@ -111,13 +117,16 @@
 			</div><!-- /navbar -->
 		</div>
 		<div data-role="content">
-			<div class="background"></div>
-			<div>
-				<input type="text" id="alias">
-				<button id="btnWelcome" class=".show-page-loading-msg" data-theme="b" data-textonly="false" data-textvisible="true" data-msgtext="Write your name, then press the button." data-icon="arrow-r" data-iconpos="right">Welcome</button>				
-				<div id="divResponse"></div>		
+			<div class="background">
+				<a href="pages/sample1.html">Sample1</a>
+				<div>
+					<input type="text" id="alias">
+					<button id="btnWelcome" class=".show-page-loading-msg" data-theme="b" data-textonly="false" data-textvisible="true" data-msgtext="Write your name, then press the button." data-icon="arrow-r" data-iconpos="right">Welcome</button>				
+					<div id="divResponse"></div>		
+				</div>
+				<br/>
+				<ul data-role="listview" class="tweetContainer"></ul>
 			</div>
-			<div id="tweetContainer" class="tweetContainer"></div>
 		</div>
 	</div>
 	<div data-role="page" id="page1">

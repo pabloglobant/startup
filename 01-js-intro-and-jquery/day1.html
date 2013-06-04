@@ -6,16 +6,15 @@
 	<style>
 		.background
 		{
-			opacity: 0.5;
-			position: absolute;
-			background-color: black;
+			/*opacity: 0.5;
+			position: absolute;*/
+			background-color: rgba(0,0,0,0.4);
 		}
 		.tweetContainer
 		{
 			position: relative;
-			left: 50%;
-			width: 300px; 			
-			background-color: white;
+			left: 30%;
+			width: 500px; 			
 		}
 	</style>
 	<script src="js/jquery-1.9.1.js" type="text/javascript"></script>
@@ -76,12 +75,15 @@
 	</script>
   </head>
 <body>
-	<div class="background"></div>
-	<div>
-		<input type="text" id="alias">
-		<input type="button" value="Welcome" id="btnWelcome"/>
-		<div id="divResponse"></div>		
+	<div class="background">
+		<div>
+			<input type="text" id="alias">
+			<input type="button" value="Welcome" id="btnWelcome"/>
+			<div id="divResponse"></div>		
+		</div>
+		<div id="tweetContainer" class="tweetContainer">
+			<ul data-role="listview"></ul>
+		</div>
 	</div>
-	<div id="tweetContainer" class="tweetContainer"></div>
 </body>
 </html>
