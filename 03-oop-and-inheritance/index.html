@@ -7,7 +7,6 @@
 		function MovieObserver() {
 			this.Update = function(movie, event) {
 				if (event == 'playing') {
-					console.log(movie);
 					console.log('Playing ' + movie.get('title') || 'movie' + '...');
 				}
 				else if (event == 'stopped')
@@ -16,25 +15,25 @@
 		}
 
 
-		var Movie = (function() {
+		var Movie = function() {
 			var attributes = [];
 			var observers = [];
 
-			var notify = (function(event) {
+			var notify = (function(movie, event) {
 				var observerCount = observers.length;
 				for (var i = 0; i < observerCount; i++) {
-					observers[i].Update(this, event);
+					observers[i].Update(movie, event);
 				}
 			});
 
 			return {
 
 				play: function() {
-					notify('playing');
+					notify(this,'playing');
 				},
 
 				stop: function() {
-					notify('stopped');
+					notify(this,'stopped');
 				},
 
 				get: function(att) {
@@ -53,7 +52,7 @@
 					observers.RemoveAt( this.observers.IndexOf( observer, 0 ) );
 				}
 			};
-		}());
+		};
 		
 		/*function Movie() {
 			this.attributes = [];
@@ -131,8 +130,8 @@
 		$(document).ready(function() {
 			var observer = new MovieObserver();
 
-			var movie = new Movie();
-			var movie1 = new Movie();
+		    var movie = Movie();
+			var movie1 = Movie();
 			movie.addObserver(observer);
 			movie1.addObserver(observer);
 
