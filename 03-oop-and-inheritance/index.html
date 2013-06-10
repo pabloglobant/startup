@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="js/jquery-1.9.1.js" type="text/javascript"></script>
+		<script type="text/javascript">
+
+		function MovieObserver() {
+			this.Update = function(movie, event) {
+				if (event == 'playing') {
+					console.log(movie);
+					console.log('Playing ' + movie.get('title') || 'movie' + '...');
+				}
+				else if (event == 'stopped')
+					console.log('Stopped');
+			}
+		}
+
+
+		var Movie = (function() {
+			var attributes = [];
+			var observers = [];
+
+			var notify = (function(event) {
+				var observerCount = observers.length;
+				for (var i = 0; i < observerCount; i++) {
+					observers[i].Update(this, event);
+				}
+			});
+
+			return {
+
+				play: function() {
+					notify('playing');
+				},
+
+				stop: function() {
+					notify('stopped');
+				},
+
+				get: function(att) {
+					return attributes[att];
+				},
+
+				set: function(att, value) {
+					attributes[att] = value;
+				},
+
+				addObserver: function(observer) {
+					observers.push(observer);
+				},
+
+				removeObserver: function(observer) {
+					observers.RemoveAt( this.observers.IndexOf( observer, 0 ) );
+				}
+			};
+		}());
+		
+		/*function Movie() {
+			this.attributes = [];
+			this.observers = [];
+
+			this.play = function() {
+				this.notify('playing');
+			}
+
+			this.stop = function() {
+				this.notify('stopped');
+			}
+
+			this.get = function(att, value) {
+				return this.attributes[att];
+			}
+
+			this.set = function(att, value) {
+				this.attributes[att] = value;
+			}
+
+			this.addObserver = function(observer) {
+				this.observers.push(observer);
+			}
+
+			this.removeObserver = (function(observer) {
+				this.observers.RemoveAt( this.observers.IndexOf( observer, 0 ) );
+			});
+
+			this.notify = function(event) {
+				var observerCount = this.observers.length;
+				for (var i = 0; i < observerCount; i++) {
+					this.observers[i].Update(this, event);
+				}
+			}
+		}
+
+
+		function Movie() {
+			this.attributes = [];
+			this.observers = [];
+		}
+
+		Movie.prototype.play = function() {
+			this.Notify('playing');
+		}
+
+		Movie.prototype.stop = function() {
+			this.Notify('stopped');
+		}
+
+		Movie.prototype.get = function(att, value) {
+			return this.attributes[att];
+		}
+
+		Movie.prototype.set = function(att, value) {
+			this.attributes[att] = value;
+		}
+
+		Movie.prototype.AddObserver= function(observer) {
+			this.observers.push(observer);
+		}
+
+		Movie.prototype.RemoveObserver = function(observer) {
+			this.observers.RemoveAt( this.observers.IndexOf( observer, 0 ) );
+		}
+
+		Movie.prototype.Notify = function(event) {
+			var observerCount = this.observers.length;
+			for (var i = 0; i < observerCount; i++) {
+				this.observers[i].Update(this, event);
+			}
+		}*/
+
+		$(document).ready(function() {
+			var observer = new MovieObserver();
+
+			var movie = new Movie();
+			var movie1 = new Movie();
+			movie.addObserver(observer);
+			movie1.addObserver(observer);
+
+			movie.set('title', 'Gladiator');
+			movie1.set('title', 'Spartacus');
+
+			movie.play();			
+			movie1.play();
+			movie.stop();
+			movie1.stop();
+		});
+
+		</script>
+	</head>
+	<body>
+
+	</body>
+</html>
